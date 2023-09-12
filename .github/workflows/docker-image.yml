@@ -23,7 +23,7 @@ jobs:
     - name: Build the Docker image
       run: |
         set -e
-        docker build image --tag my-app-backend:latest
-        docker push my-app-backend:latest
+        docker build image --tag ultraviolence/my-app-backend:latest
+        docker push ultraviolence/my-app-backend:latest
       env:
         DOCKER_BUILDKIT: 1
