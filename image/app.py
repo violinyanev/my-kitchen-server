@@ -14,6 +14,14 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+def get_api_version():
+    return {
+        "api_version_major": 0,
+        "api_version_minor": 1,
+        "api_version_patch": 0,
+    }
+
+
 @app.route('/health', methods=['GET'])
 def health():
     return 'OK', 200
@@ -46,9 +54,7 @@ def albums():
 
     if directory.is_dir():
         albums = {
-            "api_version_major": 0,
-            "api_version_minor": 1,
-            "api_version_patch": 0,
+            **get_api_version(),
             "albums": []
         }
 
@@ -64,6 +70,26 @@ def albums():
         print("Bad data directory")
         return 'No data', 404
 
+
+
+@app.route('/recipes', methods=['GET'])
+def recipes():
+    recipes = {
+        **get_api_version(),
+        "recipes": [
+            {
+                "title": "tasty onions",
+                "body": "Crisp them or eat them raw"
+            },
+            {
+                "title": "berries",
+                "body": "Munch..."
+            },
+        ]
+    }
+
+
+    return recipes, 200
 
 
 if __name__ == '__main__':
