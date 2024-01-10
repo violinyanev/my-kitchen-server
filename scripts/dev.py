@@ -74,7 +74,7 @@ def start_impl(conf):
     persistent_root = base_dir / f'data-vol'
     print(f'Persistent storage: {persistent_root}')
     os.makedirs(persistent_root, exist_ok=True)
-    mounts = ['-v', f'{persistent_root}:/var/data']
+    mounts = ['-v', f'{persistent_root}:/tmp/data']
 
     # run
     conf.run_docker(['docker', 'run',
