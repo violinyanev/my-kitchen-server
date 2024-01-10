@@ -47,7 +47,10 @@ class Database:
 
 
         # TODO: find a better way to handle the IDs
-        self.next_id = int(max(self.data['recipes'], key=lambda d: d['id'])['id']) + 1
+        if self.data['recipes']:
+            self.next_id = int(max(self.data['recipes'], key=lambda d: d['id'])['id']) + 1
+        else:
+            self.next_id = 1
 
 
     def get(self):
