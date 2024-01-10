@@ -45,9 +45,30 @@ class Database:
 
         jsonschema.validate(self.data, RECIPE_SCHEMA)
 
+
+        # TODO: find a better way to handle the IDs
+        self.next_id = int(max(self.data['recipes'], key=lambda d: d['id'])['id']) + 1
+
+
     def get(self):
         return self.data
 
 
     def put(self, recipe):
-        pass
+        if 'title' not in recipe or len(recipe['title'].strip()) == 0:
+            raise "Recipe title can't be empty"
+        new_recipe = {
+            "id": self.next_id,
+            "title": recipe['title'],
+            "body": recipe['body'],
+            "date": '2024-01-15-16-04', # Fix this
+            "user": 'Violin', # Fix this
+        }
+        self.next_id += 1
+
+        jsonschema.validate(self.data, RECIPE_SCHEMA)
+
+        self.data['recipes'].append(new_recipe)
+
+        with open(self.file, 'w') as f:
+            f.write(yaml.safe_dump(self.data))

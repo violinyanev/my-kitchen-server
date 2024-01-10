@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from werkzeug.utils import secure_filename
 from pathlib import Path
 from recipes import database as recipe_db
@@ -74,11 +74,22 @@ def albums():
 
 
 @app.route('/recipes', methods=['GET'])
-def recipes():
+def get_recipes():
     return {
         **get_api_version(),
         **app.recipesDb.get()
     }, 200
+
+
+@app.route('/recipes', methods=['POST'])
+def create_recipe():
+    data = request.get_json()
+
+    try:
+        new_recipe = app.recipesDb.put(data)
+        return jsonify({"message": "Recipe created successfully", "recipe": new_recipe}), 201
+    except:
+        abort(400)
 
 
 if __name__ == '__main__':
