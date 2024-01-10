@@ -77,16 +77,21 @@ def albums():
 def recipes():
     return {
         **get_api_version(),
-        **recipe_db.get()
+        **app.recipesDb.get()
     }, 200
 
 
 if __name__ == '__main__':
     app.config['UPLOAD_FOLDER'] = '/tmp/data'
+
     if len(sys.argv) == 2:
         app.config['UPLOAD_FOLDER'] = sys.argv[1]
 
     folder = Path(app.config['UPLOAD_FOLDER'])
     if not folder.exists():
         folder.mkdir(parents=True, exist_ok=True)
+
+    recipes_file = folder / 'recipes.yaml'
+    app.recipesDb = recipe_db.Database(recipes_file)
+
     app.run(host='0.0.0.0', port=5000)
