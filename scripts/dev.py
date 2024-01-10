@@ -23,15 +23,15 @@ class Common:
     def __init__(self):
         self.script_dir = Path(os.path.realpath(os.path.dirname(__file__)))
         self.root=subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], shell=False, cwd=self.script_dir).decode('utf-8').strip()
+        self.image_tag=subprocess.check_output(["git", "describe", "--tags", "--abbrev=0"], shell=False, cwd=self.script_dir).decode('utf-8').strip()
         self.docker_registry = 'ghcr.io'
         self.image_folder = 'image'
         self.container_name = 'violinyanev/my-app-backend'
 
-    def get_current_tag(self):
-        return subprocess.check_output(['bash', 'create-dockertag.sh'], cwd=self.script_dir).decode('utf-8').strip()
-
-    def current_docker_image(self):
-        return f'{self.docker_registry}/{self.container_name}:{self.get_current_tag()}'
+    def docker_image(self, tag = None):
+        if not tag:
+            tag = self.image_tag
+        return f'{self.docker_registry}/{self.container_name}:{tag}'
 
     def run_docker(self, args):
         print('Run:', ' '.join(args))
@@ -56,7 +56,7 @@ def build_impl(conf):
 
     conf.run_docker(['docker', 'build'] +
                     proxy_args +
-                     ['-t', conf.current_docker_image(),
+                     ['-t', conf.docker_image(tag='dev-build'),
                      conf.image_folder])
 
 
@@ -66,7 +66,7 @@ def build(conf):
     build_impl(conf)
 
 
-def start_impl(conf):
+def start_impl(conf, tag):
     # construct folders
     git_root = (conf.script_dir / '..').resolve()
     base_dir = (git_root / '..').resolve()
@@ -81,12 +81,13 @@ def start_impl(conf):
                     '-p', '5000:5000',
                      '-i', '-t', '--rm', '--init'] +
                     mounts +
-                    [conf.current_docker_image()])
+                    [conf.docker_image(tag = tag)])
 
 @cli.command()
 @click.pass_obj
-def start(conf):
-    start_impl(conf)
+@click.option('--tag', help='tag. Default is last tag')
+def start(conf, tag):
+    start_impl(conf, tag)
 
 
 @cli.command()
