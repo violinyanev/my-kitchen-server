@@ -93,7 +93,7 @@ def recipes():
 
 
 if __name__ == '__main__':
-    app.config['UPLOAD_FOLDER'] = '/var/data'
+    app.config['UPLOAD_FOLDER'] = '/tmp/data'
     if len(sys.argv) == 2:
         app.config['UPLOAD_FOLDER'] = sys.argv[1]
 
