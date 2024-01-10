@@ -3,6 +3,7 @@
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from pathlib import Path
+from recipes import database as recipe_db
 import sys
 
 app = Flask(__name__)
@@ -74,22 +75,10 @@ def albums():
 
 @app.route('/recipes', methods=['GET'])
 def recipes():
-    recipes = {
+    return {
         **get_api_version(),
-        "recipes": [
-            {
-                "title": "tasty onions",
-                "body": "Crisp them or eat them raw"
-            },
-            {
-                "title": "berries",
-                "body": "Munch..."
-            },
-        ]
-    }
-
-
-    return recipes, 200
+        **recipe_db.get()
+    }, 200
 
 
 if __name__ == '__main__':
