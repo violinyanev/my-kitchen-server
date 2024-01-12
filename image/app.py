@@ -73,7 +73,7 @@ def albums():
 
 
 @app.route('/version', methods=['GET'])
-def get_recipes():
+def version():
     return {
         **get_api_version()
     }, 200
