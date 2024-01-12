@@ -100,8 +100,12 @@ def create_recipe():
 @app.route('/recipes/<int:recipe_id>', methods=['DELETE'])
 def delete_recipe(recipe_id):
     try:
-        app.recipesDb.delete(recipe_id)
-        return jsonify({"message": "Recipe deleted successfully", "recipe": recipe_id}), 204
+        success = app.recipesDb.delete(recipe_id)
+        if success:
+            return jsonify({"message": "Recipe deleted successfully", "recipe": recipe_id}), 204
+        else:
+            abort(400)
+
     except:
         abort(400)
 

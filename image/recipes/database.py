@@ -75,16 +75,17 @@ class Database:
 
         self.save()
 
+        return new_recipe
+
 
     def delete(self, recipe_id):
-        deleted = False
         for i, r in enumerate(self.data['recipes']):
             if r['id'] == recipe_id:
                 del self.data['recipes'][i]
                 self.save()
+                return True
 
-        if not deleted:
-            raise Exception(f"Recipe {recipe_id} not found")
+        return False
 
 
     def save(self):
