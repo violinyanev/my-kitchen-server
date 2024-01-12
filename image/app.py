@@ -112,8 +112,7 @@ def delete_recipe(recipe_id):
 
 
 if __name__ == '__main__':
-    v=get_api_version()
-    print(f"API version: {v[0]}.{v[1]}.{v[2]}")
+    print(f"API version: {get_api_version()}")
 
     app.config['UPLOAD_FOLDER'] = '/tmp/data'
 
