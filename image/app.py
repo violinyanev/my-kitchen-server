@@ -74,16 +74,12 @@ def albums():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return {
-        **get_api_version()
-    }, 200
+    return get_api_version, 200
 
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
-    return {
-        **app.recipesDb.get()
-    }, 200
+    return app.recipesDb.get(), 200
 
 
 @app.route('/recipes', methods=['POST'])

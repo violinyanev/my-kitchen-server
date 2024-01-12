@@ -54,7 +54,7 @@ class Database:
 
 
     def get(self):
-        return self.data
+        return self.data['recipes']
 
 
     def put(self, recipe):
