@@ -97,6 +97,16 @@ def create_recipe():
         abort(400)
 
 
+@app.route('/recipes/<int:recipe_id>', methods=['DELETE'])
+def delete_recipe(recipe_id):
+    try:
+        app.recipesDb.delete(recipe_id)
+        return jsonify({"message": "Recipe deleted successfully", "recipe": recipe_id}), 204
+    except:
+        abort(400)
+
+
+
 if __name__ == '__main__':
     app.config['UPLOAD_FOLDER'] = '/tmp/data'
 
