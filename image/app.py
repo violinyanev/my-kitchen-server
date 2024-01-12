@@ -72,11 +72,16 @@ def albums():
         return 'No data', 404
 
 
+@app.route('/version', methods=['GET'])
+def get_recipes():
+    return {
+        **get_api_version()
+    }, 200
+
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
     return {
-        **get_api_version(),
         **app.recipesDb.get()
     }, 200
 
