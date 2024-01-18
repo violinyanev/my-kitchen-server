@@ -24,3 +24,7 @@ python3 ./scripts/dev.py build
 ## Open TODOs
 
 * Add proper logging
+* Find a better database than yaml files
+* Add a check/tests for backwards compatibility
+* Provide swagger
+* Search for a better library for REST APIs
