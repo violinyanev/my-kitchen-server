@@ -20,3 +20,7 @@ python3 ./image/app.py
 ```bash
 python3 ./scripts/dev.py build
 ```
+
+## Open TODOs
+
+* Add proper logging
