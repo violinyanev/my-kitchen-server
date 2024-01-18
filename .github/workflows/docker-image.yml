@@ -27,6 +27,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Run unit tests
+        run: |
+          chmod +x path/to/your/script.sh
+          cd image
+          python3 -m unittest discover
+
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3.1.1
