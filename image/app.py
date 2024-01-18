@@ -118,6 +118,6 @@ if __name__ == '__main__':
         folder.mkdir(parents=True, exist_ok=True)
 
     recipes_file = folder / 'recipes.yaml'
-    app.recipesDb = recipe_db.Database(recipes_file)
+    app.recipesDb = recipe_db.Database(recipes_file, create_backup=True)
 
     app.run(host='0.0.0.0', port=5000)

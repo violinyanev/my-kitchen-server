@@ -83,7 +83,6 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(error, "There is no recipe with id 1")
 
     def test_save(self):
-        # Test the save method
         db = database.Database(self.test_file)
         recipe = {"id": 1, "title": "Test Recipe", "body": "Recipe body"}
         db.put(recipe)
