@@ -2,6 +2,7 @@
 
 import yaml
 import jsonschema
+import time
 
 RECIPE_SCHEMA = {
     'type': 'object',
@@ -14,11 +15,11 @@ RECIPE_SCHEMA = {
                     'id': {'type': 'integer'},
                     'title': {'type': 'string'},
                     'body': {'type': 'string'},
-                    'date': {'type': 'string'},
+                    'timestamp': {'type': 'integer'},
                     'user': {'type': 'string'},
                 },
                 'additionalProperties': False,
-                'required': [ 'id', 'title', 'date', 'user' ]
+                'required': [ 'id', 'title', 'timestamp', 'user' ]
             },
         },
     },
@@ -29,9 +30,6 @@ empty = {
     'recipes': [
     ]
 }
-
-RECIPE_DATE_FORMAT = '%Y-%m-%d-%H-%M'
-
 
 class Database:
     def __init__(self, file):
@@ -58,34 +56,54 @@ class Database:
 
 
     def put(self, recipe):
-        if 'title' not in recipe or len(recipe['title'].strip()) == 0:
-            raise "Recipe title can't be empty"
         new_recipe = {
-            "id": self.next_id,
-            "title": recipe['title'],
-            "body": recipe['body'],
-            "date": '2024-01-15-16-04', # Fix this
             "user": 'Violin', # Fix this
         }
-        self.next_id += 1
 
+        if 'timestamp' in recipe:
+            timestamp = recipe['timestamp']
+            if not isinstance(provided_timestamp, int):
+                return None, f"timestamp must be of type integer, found '{timestamp}' instead!"
+        else:
+            timestamp = time.time()
+
+        new_recipe['timestamp'] = timestamp
+
+        if 'id' in recipe:
+            provided_id = recipe['id']
+            if not isinstance(provided_id, int):
+                return None, f"id must be of type integer, found '{provided_id}' instead!"
+
+            if [r for r in self.data['recipes'] if r['id'] == provided_id]:
+                return None, f"Recipe with id {recipe['id']} exists!"
+            new_recipe['id'] = recipe['id']
+        else:
+            new_recipe['id'] = self.next_id
+            self.next_id += 1
+
+
+        if 'title' not in recipe or len(recipe['title'].strip()) == 0:
+            return None, "Recipe title can't be empty"
+        new_recipe['title'] = recipe['title']
+        new_recipe['body'] = recipe.get('body', "")
+
+        # TODO don't validate the entire array, just the recipe
         jsonschema.validate(self.data, RECIPE_SCHEMA)
 
         self.data['recipes'].append(new_recipe)
-
         self.save()
 
-        return new_recipe
+        return new_recipe, None
 
 
     def delete(self, recipe_id):
         for i, r in enumerate(self.data['recipes']):
             if r['id'] == recipe_id:
-                del self.data['recipes'][i]
+                deletedRecipe = self.data['recipes'].pop(i)
                 self.save()
-                return True
+                return True, deletedRecipe
 
-        return False
+        return False, f"There is no recipe with id {recipe_id}"
 
 
     def save(self):

@@ -87,24 +87,22 @@ def create_recipe():
     data = request.get_json()
 
     try:
-        new_recipe = app.recipesDb.put(data)
-        return jsonify({"message": "Recipe created successfully", "recipe": new_recipe}), 201
+        result, error = app.recipesDb.put(data)
+        if result:
+            return jsonify({"message": "Recipe created successfully", "recipe": result}), 201
+        else:
+            abort(400, error)
     except:
-        abort(400)
+        abort(400, "Unknown error")
 
 
 @app.route('/recipes/<int:recipe_id>', methods=['DELETE'])
 def delete_recipe(recipe_id):
-    try:
-        success = app.recipesDb.delete(recipe_id)
-        if success:
-            return jsonify({"message": "Recipe deleted successfully", "recipe": recipe_id}), 204
-        else:
-            abort(400)
-
-    except:
-        abort(400)
-
+    success, result = app.recipesDb.delete(recipe_id)
+    if success:
+        return jsonify({"message": "Recipe deleted successfully", "recipe": result}), 204
+    else:
+        abort(400, result)
 
 
 if __name__ == '__main__':
