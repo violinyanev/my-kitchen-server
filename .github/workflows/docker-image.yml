@@ -29,7 +29,6 @@ jobs:
 
       - name: Run unit tests
         run: |
-          chmod +x path/to/your/script.sh
           cd image
           python3 -m unittest discover
 
