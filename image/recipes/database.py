@@ -62,7 +62,7 @@ class Database:
 
         if 'timestamp' in recipe:
             timestamp = recipe['timestamp']
-            if not isinstance(provided_timestamp, int):
+            if not isinstance(timestamp, int):
                 return None, f"timestamp must be of type integer, found '{timestamp}' instead!"
         else:
             timestamp = time.time()
