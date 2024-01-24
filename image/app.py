@@ -3,8 +3,8 @@
 from flask import Flask, request, jsonify, abort
 from werkzeug.utils import secure_filename
 from pathlib import Path
-from recipes import database as recipe_db
-from recipes import blueprint as recipe_bp
+from recipes import database as recipes_db
+from recipes import blueprint as recipes_bp
 import sys
 
 app = Flask(__name__)
@@ -39,7 +39,8 @@ if __name__ == '__main__':
     if not folder.exists():
         folder.mkdir(parents=True, exist_ok=True)
 
-    recipes_file = folder / 'recipes.yaml'
-    app.config['recipes_db'] = recipe_db.Database(recipes_file, create_backup=True)
+    app.config['recipes_db'] = recipes_db.Database(folder / 'recipes.yaml', create_backup=True)
+
+    app.register_blueprint(recipes_bp.RecipesBlueprint, recipes_db=recipes_db)
 
     app.run(host='0.0.0.0', port=5000)
