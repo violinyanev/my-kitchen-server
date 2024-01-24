@@ -26,6 +26,7 @@ RECIPE_SCHEMA = {
             },
         },
     },
+    'required': [ 'recipes' ],
     'additionalProperties': False,
 }
 
