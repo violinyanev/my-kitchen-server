@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
+import sys
 from flask import Flask, request, jsonify, abort
-from werkzeug.utils import secure_filename
 from pathlib import Path
 from recipes import database as recipes_db
 from recipes import blueprint as recipes_bp
@@ -14,7 +14,7 @@ app = Flask(__name__)
 def get_api_version():
     return {
         "api_version_major": 0,
-        "api_version_minor": 1,
+        "api_version_minor": 4,
         "api_version_patch": 0,
     }
 
