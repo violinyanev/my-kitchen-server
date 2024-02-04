@@ -41,6 +41,8 @@ if __name__ == '__main__':
     if not folder.exists():
         folder.mkdir(parents=True, exist_ok=True)
 
+    print(f"Using data in {str(folder)}")
+
     app.config['recipes_db'] = recipes_db.Database(folder / 'recipes.yaml', create_backup=True)
     app.config['users_db'] = users_db.Database(folder / 'users.yaml', create_backup=True)
 
