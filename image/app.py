@@ -35,10 +35,7 @@ def version(current_user):
 if __name__ == '__main__':
     print(f"API version: {get_api_version()}")
 
-    # TODO fix this, it's a security risk. Must be hard error
-    if 'SECRET_KEY' not in app.config or not app.config['SECRET_KEY']:
-         print("Using dummy secret for debugging")
-         app.config['SECRET_KEY'] = "unsecure secret for debugging purposes"
+    app.config['SECRET_KEY'] = os.environ['RECIPES_SECRET_KEY']
 
     app.config['DATA_FOLDER'] = '/tmp/data'
 
