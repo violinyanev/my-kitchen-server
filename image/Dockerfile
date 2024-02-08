@@ -15,6 +15,10 @@ COPY app.py .
 
 COPY recipes/ ./recipes/
 
+COPY auth/ ./auth/
+
+COPY users/ ./users/
+
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
