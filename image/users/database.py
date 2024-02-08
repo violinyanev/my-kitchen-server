@@ -32,6 +32,12 @@ empty = {
     ]
 }
 
+class User:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+
 class Database:
     def __init__(self, file, create_backup = False):
         self.file = file
@@ -64,6 +70,50 @@ class Database:
                 self.data = yaml.safe_load(f)
 
 
+    def validate_login_request(self, data):
+        if not data:
+            return None, "Must provide user login credentials"
+
+        email = data.get('email', None)
+        password = data.get('password', None)
+        if not email or not password:
+            return None, "Must provide user email and password"
+
+        users = [u for u in self.data['users'] if u['email'] == email]
+        if not users or not len(users) == 1:
+            return None, f"Could not find user with email {email}"
+
+        user = users[0]
+        if user['password'] == password:
+            return {
+                'email': email,
+                'username': user['name'],
+            }, None
+        else:
+            return None, "Bad credentials"
+
+
+    # TODO protect
+    def create(self, email, username, password):
+        new_user = {
+            'email' : email,
+            'name': username,
+            'password': password,
+        }
+        # TODO don't validate the entire array, just the new user
+        jsonschema.validate(self.data, USERS_SCHEMA)
+
+        self.data['users'].append(new_user)
+
+        return new_user
+
+
     def get(self):
         return self.data['users']
 
+
+    def get_by_username(self, username):
+        users = [u for u in self.data['users'] if u['name'] == username]
+        if users and len(users) == 1:
+            return users[0]
+        return None

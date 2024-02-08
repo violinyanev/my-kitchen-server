@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
+import os
 import sys
 from flask import Flask, request, jsonify, abort
 from pathlib import Path
+from auth.authentication import token_required
 from recipes import database as recipes_db
 from recipes import blueprint as recipes_bp
 from users import database as users_db
@@ -25,12 +27,18 @@ def health():
 
 
 @app.route('/version', methods=['GET'])
-def version():
-    return get_api_version(), 200
+@token_required
+def version(current_user):
+    return {current_user}, 200
 
 
 if __name__ == '__main__':
     print(f"API version: {get_api_version()}")
+
+    # TODO fix this, it's a security risk. Must be hard error
+    if 'SECRET_KEY' not in app.config or not app.config['SECRET_KEY']:
+         print("Using dummy secret for debugging")
+         app.config['SECRET_KEY'] = "unsecure secret for debugging purposes"
 
     app.config['DATA_FOLDER'] = '/tmp/data'
 
