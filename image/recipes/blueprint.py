@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 
-from flask import Blueprint
+from flask import Blueprint, request, jsonify, abort, current_app
 
-from flask import Flask, request, jsonify, abort, current_app
-from werkzeug.utils import secure_filename
+from auth.authentication import token_required
 from pathlib import Path
-from recipes import database as recipe_bp
-import sys
 
 RecipesBlueprint = Blueprint('recipes', __name__)
 
@@ -15,12 +12,14 @@ def get_db():
     return current_app.config.get('recipes_db')
 
 @RecipesBlueprint.route('/recipes', methods=['GET'])
-def get_recipes():
+@token_required
+def get_recipes(current_user):
     return  get_db().get(), 200
 
 
 @RecipesBlueprint.route('/recipes', methods=['POST'])
-def create_recipe():
+@token_required
+def create_recipe(current_user):
     data = request.get_json()
 
     try:
@@ -34,7 +33,8 @@ def create_recipe():
 
 
 @RecipesBlueprint.route('/recipes/<int:recipe_id>', methods=['DELETE'])
-def delete_recipe(recipe_id):
+@token_required
+def delete_recipe(current_user, recipe_id):
     success, result = get_db().delete(recipe_id)
     if success:
         return jsonify({"message": "Recipe deleted successfully", "recipe": result}), 204

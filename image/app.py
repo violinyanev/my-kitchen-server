@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
+import os
 import sys
 from flask import Flask, request, jsonify, abort
 from pathlib import Path
+from auth.authentication import token_required
 from recipes import database as recipes_db
 from recipes import blueprint as recipes_bp
 from users import database as users_db
@@ -25,12 +27,15 @@ def health():
 
 
 @app.route('/version', methods=['GET'])
-def version():
-    return get_api_version(), 200
+@token_required
+def version(current_user):
+    return {current_user}, 200
 
 
 if __name__ == '__main__':
     print(f"API version: {get_api_version()}")
+
+    app.config['SECRET_KEY'] = os.environ['RECIPES_SECRET_KEY']
 
     app.config['DATA_FOLDER'] = '/tmp/data'
 
