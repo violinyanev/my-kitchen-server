@@ -18,9 +18,10 @@ USERS_SCHEMA = {
                     'password': {'type': 'string'},
                     'name': {'type': 'string'},
                     'email': {'type': 'string'},
+                    'admin': {'type': 'boolean'},
                 },
                 'additionalProperties': False,
-                'required': [ 'name', 'password', 'email' ]
+                'required': [ 'name', 'password', 'email', 'admin' ]
             },
         },
     },
@@ -29,13 +30,14 @@ USERS_SCHEMA = {
 
 empty = {
     'users': [
+        {
+            'name': 'testuser',
+            'email': 'test@user.com',
+            'password': 'TestPassword',
+            'admin': False,
+        }
     ]
 }
-
-class User:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
 
 
 class Database:

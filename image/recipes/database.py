@@ -74,7 +74,9 @@ class Database:
             self.next_id = 1
 
 
-    def get(self):
+    def get(self, user):
+
+        recipes = [r for r in self.data['recipes'] if r['user']]
         return self.data['recipes']
 
 

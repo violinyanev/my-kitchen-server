@@ -14,7 +14,7 @@ def get_db():
 @RecipesBlueprint.route('/recipes', methods=['GET'])
 @token_required
 def get_recipes(current_user):
-    return  get_db().get(), 200
+    return  get_db().get(current_user), 200
 
 
 @RecipesBlueprint.route('/recipes', methods=['POST'])
