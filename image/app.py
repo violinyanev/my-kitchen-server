@@ -16,8 +16,8 @@ app = Flask(__name__)
 def get_api_version():
     return {
         "api_version_major": 0,
-        "api_version_minor": 4,
-        "api_version_patch": 0,
+        "api_version_minor": 5,
+        "api_version_patch": 2,
     }
 
 

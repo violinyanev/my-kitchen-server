@@ -5,7 +5,6 @@ import jsonschema
 import time
 import shutil
 from datetime import datetime
-from pathlib import Path
 
 RECIPE_SCHEMA = {
     'type': 'object',
@@ -74,13 +73,14 @@ class Database:
             self.next_id = 1
 
 
-    def get(self):
-        return self.data['recipes']
+    def get(self, user, all):
+        user_recipes = [r for r in self.data['recipes'] if all or r['user'] == user['name']]
+        return user_recipes
 
 
-    def put(self, recipe):
+    def put(self, user, recipe):
         new_recipe = {
-            "user": 'Violin', # Fix this
+            "user": user['name']
         }
 
         if 'timestamp' in recipe:
@@ -119,9 +119,11 @@ class Database:
         return new_recipe, None
 
 
-    def delete(self, recipe_id):
+    def delete(self, user, recipe_id):
         for i, r in enumerate(self.data['recipes']):
             if r['id'] == recipe_id:
+                if r['user'] != user['name']:
+                    return False, f"Recipe {recipe_id} does not belong to you, you can't delete it!"
                 deletedRecipe = self.data['recipes'].pop(i)
                 self.save()
                 return True, deletedRecipe

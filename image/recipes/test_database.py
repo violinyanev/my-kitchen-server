@@ -2,7 +2,6 @@
 
 import unittest
 from pathlib import Path
-import jsonschema
 import yaml
 from recipes import database
 
