@@ -1,7 +1,7 @@
 # A backend for a personal app
 
-This repository contains a playground for a python-based backend
-with Flask, isolated in a docker container. Not sure what it will do yet! :)
+This repository contains a simple backend for the [My Kitchen](https://github.com/violinyanev/my-kitchen) application.
+The backend can be self-hosted on your own server.
 
 ## Running the latest image version
 
@@ -23,6 +23,7 @@ python3 ./scripts/dev.py build
 
 ## Open TODOs
 
+* Add installation instructions
 * Add proper logging
 * Find a better database than yaml files
 * Add a check/tests for backwards compatibility
