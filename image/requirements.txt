@@ -1,6 +1,6 @@
 attrs==23.2.0
 blinker==1.7.0
-click==8.1.7
+click==8.1.8
 colorama==0.4.6
 Flask==3.0.0
 itsdangerous==2.1.2
