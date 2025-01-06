@@ -6,7 +6,7 @@ services:
       - "5000:5000"
 
   nginx:
-    image: nginx:1.25.0
+    image: nginx:1.27.3
     ports:
       - "80:80"
     depends_on:
